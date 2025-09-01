@@ -1,0 +1,33 @@
+.container.py-4
+  h1.mb-4 Dashboard
+
+  .mb-3
+    strong Total Lesson Hours: #{@total_lesson_hours}
+
+  - if @active_lesson
+    .card.mb-4
+      .card-body
+        h5.card-title = @active_lesson.subject
+        p.card-text = @active_lesson.content
+        p.card-text
+          | Teacher: #{@active_lesson.teacher.full_name}
+
+        p.card-text
+          | Starts at: #{l(@active_lesson.start_time, format: :short)}
+          br
+          | Ends at: #{l(@active_lesson.end_time,   format: :short)}
+
+        / Clock In form
+        = form_with url: user_lessons_path, local: true do |f|
+          = f.hidden_field :lesson_id, value: @active_lesson.id
+          = f.submit 'Clock In', class: "btn btn-primary #{'disabled' if @user_lesson.present?}"
+
+        / Clock Out form or disabled button
+        - if @user_lesson.present?
+          = form_with model: @user_lesson, url: user_lesson_path(@user_lesson), method: :patch, local: true do |f|
+            = f.submit 'Clock Out', class: "btn btn-secondary #{'disabled' if @user_lesson.clock_out_time.present?}"
+        - else
+          button.btn.btn-secondary.disabled Clock Out
+
+  - else
+    p No active lessons.

@@ -1,5 +1,11 @@
 class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [ :home ]
-  def home
+  def dashboard
+    @total_lesson_hours = current_user.total_lesson_hours
+
+    window_start = 15.minutes.ago
+    window_end   = 75.minutes.from_now
+
+    @active_lesson = Lesson.find_by(start_time: window_start..window_end)
+    @user_lesson = current_user.user_lessons.find_by(lesson: @active_lesson) if @active_lesson
   end
 end

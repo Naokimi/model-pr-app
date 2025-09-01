@@ -5,9 +5,13 @@
 #  id                     :bigint           not null, primary key
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
+#  first_name             :string           not null
+#  last_name              :string           not null
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  role                   :string           default("student")
+#  total_lesson_hours     :integer          default(0)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -21,4 +25,17 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  ROLES = %w[student teacher]
+
+  has_many :lessons, foreign_key: :teacher_id
+  has_many :user_lessons, foreign_key: :student_id
+
+  validates :first_name, :last_name, :role, :total_lesson_hours, presence: true
+  validates :total_lesson_hours, numericality: { greater_than_or_equal_to: 0 }
+  validates :role, inclusion: { in: ROLES }
+
+  def full_name
+    "#{first_name.capitalize} #{last_name.capitalize}"
+  end
 end
