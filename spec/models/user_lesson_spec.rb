@@ -2,12 +2,12 @@
 #
 # Table name: user_lessons
 #
-#  id             :integer          not null, primary key
+#  id             :bigint           not null, primary key
 #  clock_out_time :datetime
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
-#  lesson_id      :integer          not null
-#  student_id     :integer          not null
+#  lesson_id      :bigint           not null
+#  student_id     :bigint           not null
 #
 # Indexes
 #
@@ -16,8 +16,8 @@
 #
 # Foreign Keys
 #
-#  lesson_id   (lesson_id => lessons.id)
-#  student_id  (student_id => users.id)
+#  fk_rails_...  (lesson_id => lessons.id)
+#  fk_rails_...  (student_id => users.id)
 #
 require "rails_helper"
 

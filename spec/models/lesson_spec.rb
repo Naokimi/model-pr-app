@@ -2,13 +2,13 @@
 #
 # Table name: lessons
 #
-#  id         :integer          not null, primary key
+#  id         :bigint           not null, primary key
 #  content    :text
 #  start_time :datetime         not null
 #  subject    :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  teacher_id :integer          not null
+#  teacher_id :bigint           not null
 #
 # Indexes
 #
@@ -16,7 +16,7 @@
 #
 # Foreign Keys
 #
-#  teacher_id  (teacher_id => users.id)
+#  fk_rails_...  (teacher_id => users.id)
 #
 require 'rails_helper'
 
