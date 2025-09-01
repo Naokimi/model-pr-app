@@ -10,7 +10,7 @@ RSpec.describe "Pages", type: :request do
     end
 
     context "when logged in" do
-      let(:student) { create(:user, role: 'student', total_lesson_hours: 10) }
+      let(:student) { create(:user, role: 'student', total_lesson_minutes: 600) }
       let(:teacher) { create(:user, role: 'teacher') }
 
       before do

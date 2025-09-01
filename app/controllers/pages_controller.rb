@@ -1,6 +1,6 @@
 class PagesController < ApplicationController
   def dashboard
-    @total_lesson_hours = current_user.total_lesson_hours
+    @total_lesson_minutes = current_user.total_lesson_minutes
 
     window_start = 15.minutes.ago
     window_end   = 75.minutes.from_now

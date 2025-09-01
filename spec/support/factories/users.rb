@@ -4,7 +4,7 @@ FactoryBot.define do
     last_name           { "Doe" }
     sequence(:email)    { |n| "user#{n}@example.com" }
     password            { "password123" }
-    total_lesson_hours  { 5 }
+    total_lesson_minutes { 300 }
     role                { "student" }
 
     trait :teacher do

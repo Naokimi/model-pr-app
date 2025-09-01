@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "UserLessons", type: :request do
-  let(:student) { create(:user, role: 'student', total_lesson_hours: 10) }
+  let(:student) { create(:user, role: 'student') }
   let(:teacher) { create(:user, role: 'teacher') }
-  let(:lesson) { create(:lesson, teacher: teacher, start_time: 30.minutes.from_now) }
+  let(:lesson) { create(:lesson, teacher: teacher, start_time: 60.minutes.ago) }
 
   before do
     sign_in student
@@ -42,23 +42,51 @@ RSpec.describe "UserLessons", type: :request do
   end
 
   describe "PATCH /user_lessons/:id" do
-    let!(:user_lesson) { create(:user_lesson, student: student, lesson: lesson) }
+    let!(:user_lesson) { create(:user_lesson, student: student, lesson: lesson, created_at: 60.minutes.ago) }
 
     subject { patch user_lesson_path(user_lesson) }
 
     context "when clocking out for the first time" do
-      it "updates clock_out_time" do
-        expect { subject }.to change { user_lesson.reload.clock_out_time }.from(nil)
+      context "with full lesson time" do
+        it "updates clock_out_time" do
+          expect { subject }.to change { user_lesson.reload.clock_out_time }.from(nil)
+        end
+
+        it "increases total_lesson_minutes" do
+          expect { subject }.to change { student.reload.total_lesson_minutes }.from(300).to(360)
+        end
+
+        it "redirects with success message" do
+          subject
+          expect(response).to redirect_to(root_path)
+          expect(flash[:notice]).to eq("Clocked out successfully.")
+        end
       end
 
-      it "increases total_lesson_hours" do
-        expect { subject }.to change { student.reload.total_lesson_hours }.from(10).to(11)
+      context "when clock in late" do
+        let!(:user_lesson) { create(:user_lesson, student: student, lesson: lesson, created_at: 15.minutes.ago) }
+
+        it "partially increases total_lesson_minutes" do
+          expect { subject }.to change { student.reload.total_lesson_minutes }.from(300).to(315)
+        end
       end
 
-      it "redirects with success message" do
-        subject
-        expect(response).to redirect_to(root_path)
-        expect(flash[:notice]).to eq("Clocked out successfully.")
+      context "when clock out early" do
+        before { allow(Time).to receive(:current).and_return(Time.current - 30.minutes) }
+
+        it "partially increases total_lesson_minutes" do
+          expect { subject }.to change { student.reload.total_lesson_minutes }.from(300).to(330)
+        end
+      end
+
+      context "when clockin early and clockout later" do
+        let!(:user_lesson) { create(:user_lesson, student: student, lesson: lesson, created_at: 70.minutes.ago) }
+
+        before { allow(Time).to receive(:current).and_return(Time.current + 10.minutes) }
+
+        it "increases total_lesson_minutes by the max 60" do
+          expect { subject }.to change { student.reload.total_lesson_minutes }.from(300).to(360)
+        end
       end
     end
 
@@ -71,8 +99,8 @@ RSpec.describe "UserLessons", type: :request do
         expect { subject }.not_to change { user_lesson.reload.clock_out_time }
       end
 
-      it "does not increase total_lesson_hours" do
-        expect { subject }.not_to change { student.reload.total_lesson_hours }
+      it "does not increase total_lesson_minutes" do
+        expect { subject }.not_to change { student.reload.total_lesson_minutes }
       end
 
       it "redirects with error message" do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_01_222415) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_01_225156) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -44,7 +44,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_01_222415) do
     t.datetime "updated_at", null: false
     t.string "first_name", null: false
     t.string "last_name", null: false
-    t.integer "total_lesson_hours", default: 0
+    t.integer "total_lesson_minutes", default: 0
     t.string "role", default: "student"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

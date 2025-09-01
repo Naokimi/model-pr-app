@@ -2,7 +2,7 @@
   h1.mb-4 Dashboard
 
   .mb-3
-    strong Total Lesson Hours: #{@total_lesson_hours}
+    strong Total Lesson Hours: #{(@total_lesson_minutes / 60.0).round(1)}
 
   - if @active_lesson
     .card.mb-4

@@ -11,7 +11,7 @@
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  role                   :string           default("student")
-#  total_lesson_hours     :integer          default(0)
+#  total_lesson_minutes   :integer          default(0)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -31,8 +31,8 @@ class User < ApplicationRecord
   has_many :lessons, foreign_key: :teacher_id
   has_many :user_lessons, foreign_key: :student_id
 
-  validates :first_name, :last_name, :role, :total_lesson_hours, presence: true
-  validates :total_lesson_hours, numericality: { greater_than_or_equal_to: 0 }
+  validates :first_name, :last_name, :role, :total_lesson_minutes, presence: true
+  validates :total_lesson_minutes, numericality: { greater_than_or_equal_to: 0 }
   validates :role, inclusion: { in: ROLES }
 
   def full_name
