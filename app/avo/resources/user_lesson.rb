@@ -4,7 +4,7 @@ class Avo::Resources::UserLesson < Avo::BaseResource
   # self.search = {
   #   query: -> { query.ransack(id_eq: q, m: "or").result(distinct: false) }
   # }
-  
+
   def fields
     field :id, as: :id
     field :clock_out_time, as: :date_time
