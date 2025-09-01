@@ -11,7 +11,7 @@
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  role                   :string           default("student")
-#  total_lesson_hours     :integer          default(0)
+#  total_lesson_minutes   :integer          default(0)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -32,8 +32,8 @@ RSpec.describe User, type: :model do
       expect(new_user.role).to eq("student")
     end
 
-    it "defaults total_lesson_hours to 0" do
-      expect(new_user.total_lesson_hours).to eq(0)
+    it "defaults total_lesson_minutes to 0" do
+      expect(new_user.total_lesson_minutes).to eq(0)
     end
   end
 
@@ -71,16 +71,16 @@ RSpec.describe User, type: :model do
       expect(user.errors[:role]).to include("is not included in the list")
     end
 
-    it "validates presence of total_lesson_hours" do
-      user.total_lesson_hours = nil
+    it "validates presence of total_lesson_minutes" do
+      user.total_lesson_minutes = nil
       expect(user).not_to be_valid
-      expect(user.errors[:total_lesson_hours]).to include("can't be blank")
+      expect(user.errors[:total_lesson_minutes]).to include("can't be blank")
     end
 
-    it "validates numericality of total_lesson_hours >= 0" do
-      user.total_lesson_hours = -1
+    it "validates numericality of total_lesson_minutes >= 0" do
+      user.total_lesson_minutes = -1
       expect(user).not_to be_valid
-      expect(user.errors[:total_lesson_hours]).to include("must be greater than or equal to 0")
+      expect(user.errors[:total_lesson_minutes]).to include("must be greater than or equal to 0")
     end
   end
 

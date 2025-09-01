@@ -10,7 +10,7 @@ class Avo::Resources::User < Avo::BaseResource
     field :email, as: :text
     field :first_name, as: :text
     field :last_name, as: :text
-    field :total_lesson_hours, as: :number
+    field :total_lesson_minutes, as: :number
     field :role, as: :text
     field :lessons, as: :has_many
     field :user_lessons, as: :has_many
